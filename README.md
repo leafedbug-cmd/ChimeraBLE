@@ -23,6 +23,7 @@ Built on [NimBLE-Arduino](https://github.com/h2zero/NimBLE-Arduino) 2.x.
 |---|---|---|---|
 | `esp32dev` | ESP32 WROOM | classic Xtensa dual-core | serial CLI |
 | `xiao_esp32c5` | Seeed Studio XIAO ESP32-C5 | RISC-V single-core | serial CLI |
+| `xiao_esp32c6` | Seeed Studio XIAO ESP32-C6 | RISC-V single-core (160MHz) | serial CLI |
 | `cardputer` | M5Stack Cardputer ADV | ESP32-S3 (Stamp-S3A) | on-device M5 UI |
 
 All targets use the [pioarduino](https://github.com/pioarduino/platform-espressif32)
@@ -31,8 +32,9 @@ platform (Arduino-ESP32 3.x / ESP-IDF 5.5) and **share the same BLE engine**
 `fingerprint`, `clone`). `build_src_filter` swaps only the front-end: the serial
 targets use `main.cpp` + `cli.cpp`; the Cardputer uses [`src/ui/`](src/ui/) (an
 M5 menu UI in `App`/`UI`) and runs the engine natively on its own S3 radio - no
-companion device. The XIAO ESP32-C5 board def lives in
-[`boards/seeed_xiao_esp32c5.json`](boards/seeed_xiao_esp32c5.json).
+companion device. Custom XIAO board defs live in
+[`boards/seeed_xiao_esp32c5.json`](boards/seeed_xiao_esp32c5.json) and
+[`boards/seeed_xiao_esp32c6.json`](boards/seeed_xiao_esp32c6.json).
 
 ---
 
@@ -47,15 +49,16 @@ pio run
 # pick a target
 pio run -e esp32dev
 pio run -e xiao_esp32c5
+pio run -e xiao_esp32c6
 
 # flash + monitor a specific target
-pio run -e xiao_esp32c5 -t upload
-pio device monitor -e xiao_esp32c5    # serial console @ 115200
+pio run -e xiao_esp32c6 -t upload
+pio device monitor -e xiao_esp32c6    # serial console @ 115200
 
 # one-time: flash the OUI vendor database to the device filesystem (LittleFS).
 # Needed for OUI-based vendor identification; also (re)formats LittleFS, so do
 # this BEFORE saving clone profiles you want to keep.
-pio run -e xiao_esp32c5 -t uploadfs
+pio run -e xiao_esp32c6 -t uploadfs
 ```
 
 After flashing, open the monitor. You'll get a `ble>` prompt (it changes to
